@@ -1,6 +1,12 @@
 import dotenv from 'dotenv';
-import  {ChatOpenAI } from "@langchain/openai";
-import {ChatPromptTemplate} from "@langchain/core/prompts";
+import { DataSource } from "typeorm";
+import { SqlDatabase } from "langchain/sql_db";
+import { ChatOpenAI } from "@langchain/openai";
+import {
+  RunnablePassthrough,
+  RunnableSequence,
+} from "@langchain/core/runnables";
+import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
 dotenv.config();
@@ -10,31 +16,83 @@ if (!openaiApiKey) {
   process.exit(1);
 }
 
-const chatModel = new ChatOpenAI({
-  openAIApiKey: openaiApiKey,
-  //modelName: "gpt-4-1106-preview",
-  //maxTokens: 128
-  
+const datasource = new DataSource({
+  type: "sqlite",
+  database: "Chinook.db",
 });
 
-const prompt = ChatPromptTemplate.fromMessages([
-  ["system", "You are a translator from plain English to SQL."],
-  ["user", "Convert the following natural language description into a SQL query:\n\nShow all all the elements in the table users"],
-  ["assistant", "SELECT * FROM users;"],
-  ["user", "Convert the following natural language description into a SQL query:\n\n${input}."],
+const db = await SqlDatabase.fromDataSourceParams({
+  appDataSource: datasource,
+});
+
+const prompt =
+  PromptTemplate.fromTemplate(`Based on the table schema below, write a SQL query that would answer the user's question. Return just the SQL and nothing else:
+{schema}
+
+Question: {question}
+SQL Query:`);
+
+const model = new ChatOpenAI({
+    openAIApiKey: openaiApiKey,
+    //modelName: "gpt-4-1106-preview",
+  //maxTokens: 128
+});
+
+// The `RunnablePassthrough.assign()` is used here to passthrough the input from the `.invoke()`
+// call (in this example it's the question), along with any inputs passed to the `.assign()` method.
+// In this case, we're passing the schema.
+const sqlQueryGeneratorChain = RunnableSequence.from([
+  RunnablePassthrough.assign({
+    schema: async () => db.getTableInfo(),
+  }),
+  prompt,
+  model.bind({ stop: ["\nSQLResult:"] }),
+  new StringOutputParser(),
 ]);
 
-const outputParser = new StringOutputParser();
+// const result = await sqlQueryGeneratorChain.invoke({
+//   question: "How many employees are there?",
+// });
+
+// console.log({
+//   result,
+// });
+
+/*
+  {
+    result: "SELECT COUNT(EmployeeId) AS TotalEmployees FROM Employee"
+  }
+*/
 
 const generate = async (queryDescription) => {
 
-  const llmChain = prompt.pipe(chatModel).pipe(outputParser);
-  return llmChain.invoke({
-    input: queryDescription,
-  }).then((response) => {
-    return response;
-  });
+    const finalResponsePrompt =
+    PromptTemplate.fromTemplate(`Based on the table schema below, question, sql query, and sql response, write a natural language response:
+    {schema}
 
+    Question: {question}
+    SQL Query: {query}
+    SQL Response: {response}`);
+
+    const fullChain = RunnableSequence.from([
+    RunnablePassthrough.assign({
+        query: sqlQueryGeneratorChain,
+    }),
+    {
+        schema: async () => db.getTableInfo(),
+        question: (input) => input.question,
+        query: (input) => input.query,
+        response: (input) => db.run(input.query),
+    },
+    finalResponsePrompt,
+    model,
+    ]);
+
+    const finalResponse = await fullChain.invoke({
+    question: `${queryDescription}?`,
+    });
+
+    return finalResponse.content;
 }
 
 export default generate;
