@@ -29,13 +29,13 @@ function App() {
   return (
     <main className={styles.main}>
       <img src={sqlLogo} className={styles.icon}></img>
-      <h3>Generate SQL with AI</h3>
+      <h3>Chat your SQL DB</h3>
       <form onSubmit={onSubmit}>
         <input type="text" 
         name="query-description" 
-        placeholder='Describe your query'
+        placeholder='What question do you want answered'
         onChange={(e) => setQueryDescription(e.target.value)} />
-        <input type="submit" value="Generate query" />
+        <input type="submit" value="Generate Answer" />
       </form>
       <pre>{sqlQuery}</pre>
     </main>
