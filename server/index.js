@@ -24,7 +24,8 @@ app.post("/generate", async(req, res) => {
         res.json({sqlQuery: sqlQuery});
     } catch (error) {
         console.log(error);
-        res.status(500).send("Internal Server Error");
+        //res.status(500).send("Internal Server Error");
+        res.json({sqlQuery: 'Great question.  I have not been trained on that.  Ask me something else.'});
     }
 })
 

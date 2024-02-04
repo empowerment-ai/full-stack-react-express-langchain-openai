@@ -65,3 +65,15 @@
     font-weight: bold;
     margin-top: 40px;
   }
+
+  .queryOutput {
+    max-width: 90%; /* Adjust based on your layout */
+    min-width: 90%;
+    overflow: auto; /* Adds scrollbars when content overflows */
+    background-color: #f4f4f4; /* Light grey background */
+    border: 1px solid #ccc; /* Light grey border */
+    padding: 10px;
+    margin-top: 20px;
+    white-space: pre-wrap; /* Ensures that data wraps within container */
+    word-break: break-all; /* Ensures long strings do not overflow */
+  }
