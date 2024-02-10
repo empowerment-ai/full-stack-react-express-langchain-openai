@@ -5,8 +5,8 @@
 This Full Stack application uses React, Node.js, Express, and the OpenAI API to translate natural language into SQL queries. It allows users to interact with the Chinook sample SQLite database through easy-to-understand queries, making database interactions more intuitive and accessible.
 
 ## Technologies
-- Frontend: React
-- Backend: Node.js, Express
+- client: React
+- server: Node.js, Express
 - Database: SQLite (Chinook Sample DB)
 - APIs: OpenAI, LangChain
 
@@ -31,26 +31,26 @@ This Full Stack application uses React, Node.js, Express, and the OpenAI API to 
    ```
 
 2. **Install Dependencies**
-   - Frontend:
+   - client:
      ```bash
-     cd frontend && npm install
+     cd client && npm install
      ```
-   - Backend:
+   - server:
      ```bash
-     cd backend && npm install
+     cd server && npm install
      ```
 
 3. **Set Up Environment**
-   - Create a `.env` in `backend` with `OPENAI_API_KEY=your_key_here`.
+   - Create a `.env` in `server` with `OPENAI_API_KEY=your_key_here`.
 
-4. **Run the Backend**
+4. **Run the server**
    ```bash
-   cd backend && npm start
+   cd server && npm start
    ```
 
-5. **Run the Frontend**
+5. **Run the client**
    ```bash
-   cd frontend && npm start
+   cd client && npm start
    ```
    Visit [http://localhost:3000](http://localhost:3000).
 
