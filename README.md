@@ -26,8 +26,8 @@ This Full Stack application uses React, Node.js, Express, and the OpenAI API to 
 
 1. **Clone the Repo**
    ```bash
-   git clone https://github.com/yourusername/openai-sql-translator.git
-   cd openai-sql-translator
+   git clone https://github.com/empowerment-ai/full-stack-react-express-langchain-openai.git
+   cd full-stack-react-express-langchain-openai
    ```
 
 2. **Install Dependencies**
