@@ -29,7 +29,7 @@ function App() {
   return (
     <main className={styles.main}>
       <img src={sqlLogo} className={styles.icon}></img>
-      <h3>Chat your Database</h3>
+      <h3>Chat My Database</h3>
       <form onSubmit={onSubmit}>
         <input type="text" 
         name="query-description" 

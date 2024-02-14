@@ -33,9 +33,9 @@ Question: {question}
 SQL Query:`);
 
 const model = new ChatOpenAI({
-    openAIApiKey: openaiApiKey,
+    //openAIApiKey: openaiApiKey,
     //modelName: "gpt-4-1106-preview",
-  //maxTokens: 128
+    //maxTokens: 128
 });
 
 // The `RunnablePassthrough.assign()` is used here to passthrough the input from the `.invoke()`

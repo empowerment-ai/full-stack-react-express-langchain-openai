@@ -43,10 +43,10 @@
   }
   .main input[type="text"] {
     padding: 12px 16px;
-    border: 1px solid #10a37f;
+    border: 1px solid #4b10a3;
     border-radius: 4px;
     margin-bottom: 24px;
-    outline-color: #10a37f;
+    outline-color: #4b10a3;
   }
   .main ::placeholder {
     color: #8e8ea0;
@@ -55,7 +55,7 @@
   .main input[type="submit"] {
     padding: 12px 0;
     color: #fff;
-    background-color: #10a37f;
+    background-color: #4b10a3;
     border: none;
     border-radius: 4px;
     text-align: center;
