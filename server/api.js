@@ -50,20 +50,6 @@ const sqlQueryGeneratorChain = RunnableSequence.from([
   new StringOutputParser(),
 ]);
 
-// const result = await sqlQueryGeneratorChain.invoke({
-//   question: "How many employees are there?",
-// });
-
-// console.log({
-//   result,
-// });
-
-/*
-  {
-    result: "SELECT COUNT(EmployeeId) AS TotalEmployees FROM Employee"
-  }
-*/
-
 const generate = async (queryDescription) => {
 
     const finalResponsePrompt =
